@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neil Weather | Santa Cruz, Occidental Mindoro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🌤️ Neil Weather</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#weather">Weather</a></li>
+                <li><a href="#forecast">Forecast</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>Neil Weather</h1>
+            <p>Real-time Weather for Santa Cruz, Occidental Mindoro</p>
+            <button class="cta-btn">Check Weather Now</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Current Weather Section -->
+        <section id="weather" class="weather-container">
+            <div class="section-wrapper">
+                <h2>Current Weather</h2>
+                <div class="weather-grid">
+                    <div class="weather-box" id="weatherBox">
+                        <div class="location">Santa Cruz, Occidental Mindoro</div>
+                        <div class="temp-display">
+                            <span class="temp" id="temp">28</span>°C
+                        </div>
+                        <div class="condition" id="condition">Partly Cloudy</div>
+                        <div class="weather-details">
+                            <div class="detail">
+                                <span class="label">Humidity</span>
+                                <span class="value" id="humidity">75%</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Wind</span>
+                                <span class="value" id="wind">12 km/h</span>
+                            </div>
+                            <div class="detail">
+                                <span class="label">Pressure</span>
+                                <span class="value" id="pressure">1013 mb</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forecast Section -->
+        <section id="forecast" class="forecast-container">
+            <div class="section-wrapper">
+                <h2>5-Day Forecast</h2>
+                <div class="forecast-grid">
+                    <article class="forecast-card">
+                        <h3>Tomorrow</h3>
+                        <p class="emoji">⛅</p>
+                        <p class="temp">26° - 31°</p>
+                        <p class="desc">Scattered Showers</p>
+                    </article>
+                    <article class="forecast-card">
+                        <h3>Wednesday</h3>
+                        <p class="emoji">🌧️</p>
+                        <p class="temp">24° - 29°</p>
+                        <p class="desc">Rainy</p>
+                    </article>
+                    <article class="forecast-card">
+                        <h3>Thursday</h3>
+                        <p class="emoji">🌤️</p>
+                        <p class="temp">25° - 30°</p>
+                        <p class="desc">Partly Cloudy</p>
+                    </article>
+                    <article class="forecast-card">
+                        <h3>Friday</h3>
+                        <p class="emoji">☀️</p>
+                        <p class="temp">27° - 32°</p>
+                        <p class="desc">Sunny</p>
+                    </article>
+                    <article class="forecast-card">
+                        <h3>Saturday</h3>
+                        <p class="emoji">⛅</p>
+                        <p class="temp">26° - 31°</p>
+                        <p class="desc">Partly Cloudy</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-container">
+            <div class="section-wrapper">
+                <h2>About Santa Cruz</h2>
+                <div class="about-content">
+                    <article class="about-card">
+                        <h3>📍 Location</h3>
+                        <p>Santa Cruz is a coastal municipality in Occidental Mindoro, Philippines. Coordinates: 12.5°N, 121.1°E</p>
+                    </article>
+                    <article class="about-card">
+                        <h3>🌡️ Climate</h3>
+                        <p>Tropical Maritime Climate with average temperatures of 25-32°C year-round. High humidity and warm weather throughout the year.</p>
+                    </article>
+                    <article class="about-card">
+                        <h3>🌧️ Rainy Season</h3>
+                        <p>June to October: Southwest Monsoon (Habagat) brings significant rainfall. Afternoon showers and occasional thunderstorms are common.</p>
+                    </article>
+                    <article class="about-card">
+                        <h3>☀️ Dry Season</h3>
+                        <p>November to May: Northeast Monsoon (Amihan) brings drier conditions. Perfect for outdoor activities with lower humidity.</p>
+                    </article>
+                    <article class="about-card">
+                        <h3>🌪️ Typhoon Season</h3>
+                        <p>June to November: Peak typhoon season in the region. Residents should stay alert and prepared during this period.</p>
+                    </article>
+                    <article class="about-card">
+                        <h3>🌊 Water Temperature</h3>
+                        <p>The Sulu Sea maintains warm waters year-round, averaging 27-29°C. Ideal for swimming and water activities.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Neil Weather</h4>
+                <p>Accurate weather information for Santa Cruz, Occidental Mindoro. Updates every 24 hours.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#weather">Current Weather</a></li>
+                    <li><a href="#forecast">Forecast</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Location</h4>
+                <p>Santa Cruz<br>Occidental Mindoro<br>Philippines</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Neil Weather. All rights reserved.</p>
+            <p>Last updated: <span id="updateTime">now</span> | Next update: <span id="nextUpdate">tomorrow</span></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
