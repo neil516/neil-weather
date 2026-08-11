@@ -1,8 +1,8 @@
 // Weather API - Open-Meteo (Free, No API Key Needed)
 const API_URL = 'https://api.open-meteo.com/v1/forecast';
 const LOCATION = {
-    latitude: 13.1167,
-    longitude: 120.7467,
+    latitude: 13.0843,
+    longitude: 120.7169,
     name: 'Santa Cruz, Occidental Mindoro'
 };
 
