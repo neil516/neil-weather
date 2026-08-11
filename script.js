@@ -1,8 +1,16 @@
+// Weather API - Open-Meteo (Free, No API Key Needed)
+const API_URL = 'https://api.open-meteo.com/v1/forecast';
+const LOCATION = {
+    latitude: 12.5,
+    longitude: 121.1,
+    name: 'Santa Cruz, Occidental Mindoro'
+};
+
 // Weather themes
 const themes = {
-    sunny: ['Sunny', 'Clear', 'Mostly Sunny', 'Clear Sky', 'Partly Sunny'],
-    rainy: ['Rainy', 'Heavy Rain', 'Showers', 'Rain', 'Drizzle', 'Thunderstorm', 'Scattered Showers'],
-    cloudy: ['Cloudy', 'Overcast', 'Partly Cloudy', 'Mostly Cloudy']
+    sunny: ['Clear', 'Sunny', 'Partly cloudy', 'Mostly clear'],
+    rainy: ['Rain', 'Showers', 'Heavy rain', 'Thunderstorm', 'Drizzle', 'Freezing rain'],
+    cloudy: ['Cloudy', 'Overcast', 'Mostly cloudy', 'Fog']
 };
 
 let weatherData = {
@@ -10,38 +18,103 @@ let weatherData = {
     condition: 'Partly Cloudy',
     humidity: 75,
     wind: 12,
-    pressure: 1013
+    pressure: 1013,
+    feelsLike: 30
 };
 
-// Init
+// Initialize
 window.addEventListener('load', function() {
-    generateWeather();
-    applyTheme();
-    updateDisplay();
-    setNextUpdate();
-    setInterval(updateWeather, 24 * 60 * 60 * 1000);
+    fetchLiveWeather();
+    setInterval(fetchLiveWeather, 30 * 60 * 1000); // Update every 30 minutes
 });
 
-// Random weather
-function generateWeather() {
-    const conditions = ['Sunny', 'Rainy', 'Partly Cloudy', 'Cloudy', 'Clear', 'Scattered Showers', 'Thunderstorm'];
-    weatherData.condition = conditions[Math.floor(Math.random() * conditions.length)];
-    weatherData.temp = Math.floor(Math.random() * (32 - 24) + 24);
-    weatherData.humidity = Math.floor(Math.random() * (90 - 60) + 60);
-    weatherData.wind = Math.floor(Math.random() * (20 - 8) + 8);
-    weatherData.pressure = Math.floor(Math.random() * (1020 - 1005) + 1005);
+// Fetch real-time weather from Open-Meteo API
+async function fetchLiveWeather() {
+    try {
+        const params = new URLSearchParams({
+            latitude: LOCATION.latitude,
+            longitude: LOCATION.longitude,
+            current: 'temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature',
+            temperature_unit: 'celsius',
+            wind_speed_unit: 'kmh',
+            timezone: 'auto'
+        });
+
+        const response = await fetch(`${API_URL}?${params}`);
+        const data = await response.json();
+
+        if (data.current) {
+            const current = data.current;
+            
+            // Update weather data
+            weatherData.temp = Math.round(current.temperature_2m);
+            weatherData.feelsLike = Math.round(current.apparent_temperature);
+            weatherData.humidity = current.relative_humidity_2m;
+            weatherData.wind = Math.round(current.wind_speed_10m);
+            weatherData.condition = getWeatherDescription(current.weather_code);
+            
+            // Pressure estimation (simplified)
+            weatherData.pressure = 1013;
+
+            console.log('✅ Live weather updated:', weatherData);
+        }
+
+        applyTheme();
+        updateDisplay();
+        updateTimestamp();
+    } catch (error) {
+        console.error('❌ Error fetching weather:', error);
+        // Fallback to demo data
+        updateDisplay();
+    }
 }
 
-// Apply theme
+// Convert WMO Weather Codes to descriptions
+function getWeatherDescription(code) {
+    const weatherCodes = {
+        0: 'Clear sky',
+        1: 'Mainly clear',
+        2: 'Partly cloudy',
+        3: 'Overcast',
+        45: 'Foggy',
+        48: 'Foggy',
+        51: 'Light drizzle',
+        53: 'Moderate drizzle',
+        55: 'Dense drizzle',
+        61: 'Slight rain',
+        63: 'Moderate rain',
+        65: 'Heavy rain',
+        71: 'Slight snow',
+        73: 'Moderate snow',
+        75: 'Heavy snow',
+        77: 'Snow grains',
+        80: 'Slight rain showers',
+        81: 'Moderate rain showers',
+        82: 'Violent rain showers',
+        85: 'Slight snow showers',
+        86: 'Heavy snow showers',
+        95: 'Thunderstorm',
+        96: 'Thunderstorm with slight hail',
+        99: 'Thunderstorm with heavy hail'
+    };
+    return weatherCodes[code] || 'Unknown';
+}
+
+// Apply theme based on weather
 function applyTheme() {
     document.body.classList.remove('sunny', 'rainy', 'cloudy');
     
-    if (themes.sunny.some(c => weatherData.condition.toLowerCase().includes(c.toLowerCase()))) {
+    const condition = weatherData.condition.toLowerCase();
+    
+    if (themes.sunny.some(c => condition.includes(c.toLowerCase()))) {
         document.body.classList.add('sunny');
-    } else if (themes.rainy.some(c => weatherData.condition.toLowerCase().includes(c.toLowerCase()))) {
+        console.log('🌞 Sunny Theme Applied');
+    } else if (themes.rainy.some(c => condition.includes(c.toLowerCase()))) {
         document.body.classList.add('rainy');
+        console.log('🌧️ Rainy Theme Applied');
     } else {
         document.body.classList.add('cloudy');
+        console.log('☁️ Cloudy Theme Applied');
     }
 }
 
@@ -52,22 +125,16 @@ function updateDisplay() {
     document.getElementById('humidity').textContent = weatherData.humidity + '%';
     document.getElementById('wind').textContent = weatherData.wind + ' km/h';
     document.getElementById('pressure').textContent = weatherData.pressure + ' mb';
-    document.getElementById('updateTime').textContent = new Date().toLocaleString();
 }
 
-// Update weather every 24 hours
-function updateWeather() {
-    generateWeather();
-    applyTheme();
-    updateDisplay();
-    setNextUpdate();
-}
-
-// Set next update time
-function setNextUpdate() {
+// Update timestamp
+function updateTimestamp() {
+    const now = new Date();
+    document.getElementById('updateTime').textContent = now.toLocaleString();
+    
     const next = new Date();
-    next.setHours(next.getHours() + 24);
-    document.getElementById('nextUpdate').textContent = next.toLocaleDateString() + ' ' + next.toLocaleTimeString();
+    next.setMinutes(next.getMinutes() + 30);
+    document.getElementById('nextUpdate').textContent = next.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 // Smooth scroll
@@ -78,3 +145,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
 });
+
+console.log('🌍 Neil Weather Live - Connecting to Santa Cruz...');
+console.log('📍 Location:', LOCATION.name);
+console.log('⏰ Updates: Every 30 minutes');
