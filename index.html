@@ -26,7 +26,7 @@
         <div class="hero-content">
             <h1>Neil Weather</h1>
             <p>Real-time Weather for Santa Cruz, Occidental Mindoro</p>
-            <button class="cta-btn">Check Weather Now</button>
+            <button class="cta-btn" onclick="fetchLiveWeather()">🔄 Get Weather Now</button>
         </div>
     </header>
 
@@ -39,24 +39,28 @@
                 <div class="weather-grid">
                     <div class="weather-box" id="weatherBox">
                         <div class="location">Santa Cruz, Occidental Mindoro</div>
+                        <div class="coordinates">Latitude: 13.1167°N | Longitude: 120.7467°E</div>
                         <div class="temp-display">
-                            <span class="temp" id="temp">28</span>°C
+                            <span class="temp" id="temp">--</span>°C
                         </div>
-                        <div class="condition" id="condition">Partly Cloudy</div>
+                        <div class="feels-like">Feels like <span id="feelsLike">--</span>°C</div>
+                        <div class="condition" id="condition">Loading...</div>
                         <div class="weather-details">
                             <div class="detail">
-                                <span class="label">Humidity</span>
-                                <span class="value" id="humidity">75%</span>
+                                <span class="label">💧 Humidity</span>
+                                <span class="value" id="humidity">--%</span>
                             </div>
                             <div class="detail">
-                                <span class="label">Wind</span>
-                                <span class="value" id="wind">12 km/h</span>
+                                <span class="label">💨 Wind Speed</span>
+                                <span class="value" id="wind">-- km/h</span>
                             </div>
                             <div class="detail">
-                                <span class="label">Pressure</span>
-                                <span class="value" id="pressure">1013 mb</span>
+                                <span class="label">🔽 Pressure</span>
+                                <span class="value" id="pressure">-- mb</span>
                             </div>
                         </div>
+                        <button class="refresh-btn" onclick="fetchLiveWeather()">🔄 Refresh Weather</button>
+                        <div class="last-update" id="lastUpdate">Click button to load weather</div>
                     </div>
                 </div>
             </div>
@@ -69,7 +73,7 @@
                 <div class="forecast-grid">
                     <article class="forecast-card">
                         <h3>Tomorrow</h3>
-                        <p class="emoji">⛅</p>
+                        <p class="emoji">🌤️</p>
                         <p class="temp">26° - 31°</p>
                         <p class="desc">Scattered Showers</p>
                     </article>
@@ -93,7 +97,7 @@
                     </article>
                     <article class="forecast-card">
                         <h3>Saturday</h3>
-                        <p class="emoji">⛅</p>
+                        <p class="emoji">🌤️</p>
                         <p class="temp">26° - 31°</p>
                         <p class="desc">Partly Cloudy</p>
                     </article>
@@ -108,7 +112,7 @@
                 <div class="about-content">
                     <article class="about-card">
                         <h3>📍 Location</h3>
-                        <p>Santa Cruz is a coastal municipality in Occidental Mindoro, Philippines. Coordinates: 12.5°N, 121.1°E</p>
+                        <p>Santa Cruz is a coastal municipality in Occidental Mindoro, Philippines. Coordinates: 13.1167°N, 120.7467°E</p>
                     </article>
                     <article class="about-card">
                         <h3>🌡️ Climate</h3>
@@ -128,7 +132,7 @@
                     </article>
                     <article class="about-card">
                         <h3>🌊 Water Temperature</h3>
-                        <p>The Sulu Sea maintains warm waters year-round, averaging 27-29°C. Ideal for swimming and water activities.</p>
+                        <p>The Philippine Sea maintains warm waters year-round, averaging 27-29°C. Ideal for swimming and water activities.</p>
                     </article>
                 </div>
             </div>
@@ -140,7 +144,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Neil Weather</h4>
-                <p>Accurate weather information for Santa Cruz, Occidental Mindoro. Updates every 24 hours.</p>
+                <p>Live, accurate weather information for Santa Cruz, Occidental Mindoro. Real-time updates.</p>
             </div>
             <div class="footer-section">
                 <h4>Quick Links</h4>
@@ -153,12 +157,12 @@
             </div>
             <div class="footer-section">
                 <h4>Location</h4>
-                <p>Santa Cruz<br>Occidental Mindoro<br>Philippines</p>
+                <p>Santa Cruz<br>Occidental Mindoro<br>Philippines<br>13.1167°N, 120.7467°E</p>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Neil Weather. All rights reserved.</p>
-            <p>Last updated: <span id="updateTime">now</span> | Next update: <span id="nextUpdate">tomorrow</span></p>
+            <p>Last updated: <span id="updateTime">Click refresh button</span></p>
         </div>
     </footer>
 

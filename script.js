@@ -1,8 +1,8 @@
 // Weather API - Open-Meteo (Free, No API Key Needed)
 const API_URL = 'https://api.open-meteo.com/v1/forecast';
 const LOCATION = {
-    latitude: 12.5,
-    longitude: 121.1,
+    latitude: 13.1167,
+    longitude: 120.7467,
     name: 'Santa Cruz, Occidental Mindoro'
 };
 
@@ -14,30 +14,36 @@ const themes = {
 };
 
 let weatherData = {
-    temp: 28,
-    condition: 'Partly Cloudy',
-    humidity: 75,
-    wind: 12,
-    pressure: 1013,
-    feelsLike: 30
+    temp: null,
+    condition: 'Loading...',
+    humidity: null,
+    wind: null,
+    pressure: null,
+    feelsLike: null
 };
 
 // Initialize
 window.addEventListener('load', function() {
-    fetchLiveWeather();
-    setInterval(fetchLiveWeather, 30 * 60 * 1000); // Update every 30 minutes
+    console.log('🌍 Neil Weather App Initialized');
+    console.log('📍 Location:', LOCATION.name);
+    console.log('Coordinates: ' + LOCATION.latitude + '°N, ' + LOCATION.longitude + '°E');
+    console.log('Click "Get Weather Now" button to fetch live weather');
 });
 
 // Fetch real-time weather from Open-Meteo API
 async function fetchLiveWeather() {
+    console.log('🔄 Fetching live weather for Santa Cruz...');
+    document.getElementById('condition').textContent = 'Loading...';
+    document.getElementById('temp').textContent = '--';
+    
     try {
         const params = new URLSearchParams({
             latitude: LOCATION.latitude,
             longitude: LOCATION.longitude,
-            current: 'temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature',
+            current: 'temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature,pressure_msl',
             temperature_unit: 'celsius',
             wind_speed_unit: 'kmh',
-            timezone: 'auto'
+            timezone: 'Asia/Manila'
         });
 
         const response = await fetch(`${API_URL}?${params}`);
@@ -46,26 +52,28 @@ async function fetchLiveWeather() {
         if (data.current) {
             const current = data.current;
             
-            // Update weather data
-            weatherData.temp = Math.round(current.temperature_2m);
-            weatherData.feelsLike = Math.round(current.apparent_temperature);
+            // Update weather data with EXACT values
+            weatherData.temp = current.temperature_2m;
+            weatherData.feelsLike = current.apparent_temperature;
             weatherData.humidity = current.relative_humidity_2m;
-            weatherData.wind = Math.round(current.wind_speed_10m);
+            weatherData.wind = current.wind_speed_10m;
+            weatherData.pressure = current.pressure_msl || 1013;
             weatherData.condition = getWeatherDescription(current.weather_code);
-            
-            // Pressure estimation (simplified)
-            weatherData.pressure = 1013;
 
-            console.log('✅ Live weather updated:', weatherData);
+            console.log('✅ LIVE Weather Data Retrieved:');
+            console.log('🌡️ Temperature:', weatherData.temp + '°C');
+            console.log('💨 Wind Speed:', weatherData.wind + ' km/h');
+            console.log('💧 Humidity:', weatherData.humidity + '%');
+            console.log('🔽 Pressure:', weatherData.pressure + ' mb');
+            console.log('☁️ Condition:', weatherData.condition);
+
+            applyTheme();
+            updateDisplay();
+            updateTimestamp();
         }
-
-        applyTheme();
-        updateDisplay();
-        updateTimestamp();
     } catch (error) {
         console.error('❌ Error fetching weather:', error);
-        // Fallback to demo data
-        updateDisplay();
+        document.getElementById('condition').textContent = 'Error loading weather';
     }
 }
 
@@ -108,7 +116,7 @@ function applyTheme() {
     
     if (themes.sunny.some(c => condition.includes(c.toLowerCase()))) {
         document.body.classList.add('sunny');
-        console.log('🌞 Sunny Theme Applied');
+        console.log('☀️ Sunny Theme Applied');
     } else if (themes.rainy.some(c => condition.includes(c.toLowerCase()))) {
         document.body.classList.add('rainy');
         console.log('🌧️ Rainy Theme Applied');
@@ -118,23 +126,30 @@ function applyTheme() {
     }
 }
 
-// Update display
+// Update display with EXACT values
 function updateDisplay() {
-    document.getElementById('temp').textContent = weatherData.temp;
+    document.getElementById('temp').textContent = weatherData.temp !== null ? weatherData.temp.toFixed(1) : '--';
+    document.getElementById('feelsLike').textContent = weatherData.feelsLike !== null ? weatherData.feelsLike.toFixed(1) : '--';
     document.getElementById('condition').textContent = weatherData.condition;
-    document.getElementById('humidity').textContent = weatherData.humidity + '%';
-    document.getElementById('wind').textContent = weatherData.wind + ' km/h';
-    document.getElementById('pressure').textContent = weatherData.pressure + ' mb';
+    document.getElementById('humidity').textContent = weatherData.humidity !== null ? weatherData.humidity + '%' : '--';
+    document.getElementById('wind').textContent = weatherData.wind !== null ? weatherData.wind.toFixed(1) + ' km/h' : '--';
+    document.getElementById('pressure').textContent = weatherData.pressure !== null ? weatherData.pressure.toFixed(0) + ' mb' : '--';
 }
 
 // Update timestamp
 function updateTimestamp() {
     const now = new Date();
-    document.getElementById('updateTime').textContent = now.toLocaleString();
-    
-    const next = new Date();
-    next.setMinutes(next.getMinutes() + 30);
-    document.getElementById('nextUpdate').textContent = next.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeString = now.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    document.getElementById('updateTime').textContent = 'Last updated: ' + timeString;
+    document.getElementById('lastUpdate').textContent = '⏱️ Last updated: ' + timeString;
 }
 
 // Smooth scroll
@@ -146,6 +161,5 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
 });
 
-console.log('🌍 Neil Weather Live - Connecting to Santa Cruz...');
-console.log('📍 Location:', LOCATION.name);
-console.log('⏰ Updates: Every 30 minutes');
+console.log('🌐 Neil Weather Live Website Ready');
+console.log('Click "Get Weather Now" or "Refresh Weather" button for exact current conditions');
